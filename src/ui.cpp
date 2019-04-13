@@ -6,6 +6,7 @@ void UserInterface::start() {
   bool waiting = true;
   string input;
   cout << "Would you like to start a new season? (y/n): ";
+  //Get input, make it all lowercase and then see if the user input yes or no
   do {
     getline(cin, input);
     transform(input.begin(), input.end(), input.begin(), ::tolower);
