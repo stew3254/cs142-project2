@@ -1,8 +1,11 @@
 #include <iostream>
+#include "ui.h"
+
 using namespace std;
 
 int main()
 {
-    cout << "Hello World" << endl;
-    return 0;
+  UserInterface ui;
+  ui.start();
+  return 0;
 }
