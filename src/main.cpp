@@ -5,7 +5,7 @@ using namespace std;
 
 int main()
 {
-  UserInterface ui;
+  UI ui;
   ui.start();
   return 0;
 }

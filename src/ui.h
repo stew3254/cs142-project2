@@ -7,10 +7,14 @@
 #include <string>
 #include "soccer.h"
 
-class UserInterface {
+class UI {
 public:
+  void display();
   void start();
   bool run();
+
+private:
+  Season season_;
 };
 
 #endif
