@@ -2,6 +2,21 @@
 
 using namespace std;
 
+
+//adds a player to the player map
+map<string,Player>::iterator Season::add_player(const string & name, const int & birth_year_, const string & status) {
+
+    map<string,Player>::iterator new_entry_;
+    if(get_league(birth_year_) != "fail"){
+        cout << name << " has been added to the roster" << endl;
+        auto entry = players_.insert({get_key(name), {get_first(name), get_last(name), birth_year_, paid(status)}});
+        new_entry_ = entry.first;
+    }
+    else
+        cout << "This player does not fit the age requirement" << endl;
+    return new_entry_;
+}
+
 //Returns a key to the player in the map
 string Season::get_key(const string & name) {
   string key = "";
@@ -35,7 +50,7 @@ string Season::get_first(const string & name) {
 
 //Gets a player's last name
 string Season::get_last(const string & name) {
-  std::string last = "";
+  string last = "";
   int space = 0;
   for(int i = 0; i < name.length(); ++i) {
     if(name[i] == ' ')
@@ -45,6 +60,27 @@ string Season::get_last(const string & name) {
   }
   return last;
 }
+
+//gets the league the player is in
+string Season::get_league(const int & birth_year_){
+      const int age = (current_year_ - birth_year_);
+      string league = "";
+        if(age > 4 && age < 6)
+            league = "U6";
+        else if(age > 5 && age < 8)
+            league = "U8";
+        else if(age > 8 && age < 10)
+            league = "U10";
+        else if(age > 10 && age < 12)
+            league = "U12";
+        else if(age > 12 && age < 14)
+            league = "U14";
+        else if(age > 14 && age < 17)
+            league = "U17";
+        else if(age > 17 || age < 4)
+            league = "fail";
+        return league;
+  }
 
 //Passed by value because it gets changed and I'm not sure if
 //the original should be changed or not
