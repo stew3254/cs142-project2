@@ -82,6 +82,31 @@ string Season::get_league(const int & birth_year_){
         return league;
   }
 
+//Opens the season file
+bool Season::open(const string & file) {
+  ifstream in(file);
+  if (!in)
+    return false;
+
+  string first_name;
+  string last_name;
+  int year;
+  bool has_paid;
+  stringstream ss;
+  string temp;
+
+  //Not tested yet
+  in >> current_year_;
+  while (getline(in, temp)) {
+    ss.str(temp);
+    ss >> first_name >> last_name >> year >> boolalpha >> has_paid;
+    //Could be a bit more efficient
+    string name = first_name + " " + last_name;
+    //add_player(name, year, has_paid);
+  }
+  return true;
+}
+
 //Passed by value because it gets changed and I'm not sure if
 //the original should be changed or not
 bool Season::paid(std::string status) {

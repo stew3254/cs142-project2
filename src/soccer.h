@@ -2,9 +2,11 @@
 #define soccer_h_
 
 #include <algorithm>
+#include <fstream>
 #include <iostream>
 #include <map>
 #include <string>
+#include <sstream>
 
 struct Player {
   Player() : Player("No ", "Name", 2000, false) {}
@@ -26,7 +28,7 @@ public:
   std::string get_first(const std::string & name);
   std::string get_last(const std::string & name);
   std::string get_league(const int & birth_year_);
-
+  bool open(const std::string & file);
   bool paid(std::string status);
   int year() {return current_year_;}
 

@@ -10,7 +10,7 @@ int main()
     futbol.add_player("Elias Besculides", 1999, "paid");
     futbol.add_player("Chase Beckmann", 2008, "paid");
 
-    UserInterface ui;
+    UI ui;
     ui.start();
     return 0;
 }
