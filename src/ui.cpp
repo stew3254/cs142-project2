@@ -2,13 +2,43 @@
 
 using namespace std;
 
+bool UI::exec_command(string command) {
+  if (command == "help") {
+    cout << "Commands:" << endl;
+    cout << "\t* next - displays the next player" << endl;
+    cout << "\t* previous - displays the previous player" << endl;
+  }
+  else if (command == "next") {
+    season_.next_player();
+    display();
+  }
+  else if (command == "previous") {
+    season_.previous_player();
+    display();
+  }
+  else {
+    return false;
+  }
+  return true;
+}
+
 void UI::display() {
-  cout << season_.year() << endl;
-  cout << "----" << endl << endl;
-  for (int i = 0; i < 50; ++i) {
+  system("clear || cls");
+  cout << season_.year() << " Season" << endl;
+
+  for (int i = 0; i < 35; ++i) {
     cout << "-";
   }
   cout << endl;
+
+  season_.display();
+
+  for (int i = 0; i < 35; ++i) {
+    cout << "-";
+  }
+  
+  cout << endl;
+  cout << "Type 'help' for a list of commands" << endl;
 }
 
 void UI::start() {
@@ -40,6 +70,17 @@ void UI::start() {
 }
 
 bool UI::run() {
+  string input;
+  bool exit = false;
   display();
+  cout << ">> ";
+  while (!exit && cin >> input) {
+    if (input == "exit")
+      exit = true;
+    else if (!exec_command(input))
+      cout << "Failed to run command: " + input << endl;
+    if (!exit)
+      cout << ">> ";
+  }
   return true;
 }
