@@ -9,7 +9,7 @@
 
 class UI {
 public:
-  bool exec_command(std::string command);
+  bool exec_command(const std::string & command, bool & done);
   void display();
   void start();
   bool run();

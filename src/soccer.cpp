@@ -10,10 +10,7 @@ map<string, Player>::iterator Season::add_player(const string & name,
     auto entry = players_.insert({get_key(name),
         {get_first(name), get_last(name), birth_year, paid(status)}});
     new_entry_ = entry.first;
-    //cout << name << " has been added to the roster" << endl;
   }
-  //else
-    //cout << "This player does not fit the age requirement" << endl;
   return new_entry_;
 }
 
@@ -98,6 +95,7 @@ bool Season::open(const string & file) {
   }
   //Initialize the current player
   current_player_ = players_.begin();
+  current_player_pos_ = 1;
   return true;
 }
 
