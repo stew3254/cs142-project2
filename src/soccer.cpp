@@ -4,17 +4,45 @@ using namespace std;
 
 //adds a player to the player map
 map<string, Player>::iterator Season::add_player(const string & name,
-    const int birth_year, const string & status) {
+const int birth_year, const string & status) {
   map<string,Player>::iterator new_entry_;
   if (get_league(birth_year) != -1){
     auto entry = players_.insert({get_key(name),
         {get_first(name), get_last(name), birth_year, paid(status)}});
     new_entry_ = entry.first;
-    //cout << name << " has been added to the roster" << endl;
+    cout << name << " has been added to the roster" << endl;
   }
-  //else
-    //cout << "This player does not fit the age requirement" << endl;
+  else
+    cout << "This player does not fit the age requirement" << endl;
+    new_entry_ = players_.end();
   return new_entry_;
+}
+
+//edits a player in the player map
+map<string, Player>::iterator Season::edit_player() {
+
+    //temporary code This part would be in the UI change however;
+    string new_name;
+    int new_year;
+    string new_paid;
+    cout << "Please Enter a new name" << endl;
+    getline(cin, new_name);
+    cout << "Please Enter a new birth year" << endl;
+    cin >> new_year;
+    cout << "Please Enter a new paid status" << endl;
+    cin >> new_paid;
+    ////////////////////////////////////////////////////////
+
+    //edits a player by deleting that player and adds a new player with the edited info
+    delete_player();
+    return add_player(new_name, new_year, new_paid);
+}
+
+map<string, Player>::iterator Season::delete_player() {
+
+   players_.erase(current_player_->first);
+   ++current_player_;
+   return current_player_;
 }
 
 //Returns a key to the player in the map

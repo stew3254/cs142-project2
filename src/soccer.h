@@ -23,8 +23,12 @@ public:
   typedef std::map<std::string, Player> PlayerMap;
   Season() : Season(2000) {}
   Season(const int & y) : current_year_(y) {}
-  std::map<std::string, Player>::iterator add_player(const std::string & name,
-      const int birth_year, const std::string & status);
+
+  std::map<std::string, Player>::iterator add_player(const std::string & name, const int birth_year, const std::string & status);
+  std::map<std::string, Player>::iterator edit_player();
+  std::map<std::string, Player>::iterator delete_player();
+
+
   void display();
   std::string get_key(const std::string & name);
   std::string get_first(const std::string & name);
