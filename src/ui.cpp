@@ -17,6 +17,11 @@ bool UI::exec_command(const string & command, bool & done) {
     //cout << "\t* exit - exits the search view" << endl;
     cout << "\t* stop - stops the program" << endl;
   }
+
+  else if (command == "delete") {
+    season_.delete_player();
+    display();
+  }
   else if (command == "next") {
     season_.next_player();
     display();
@@ -29,26 +34,37 @@ bool UI::exec_command(const string & command, bool & done) {
     string name;
     int year;
     string has_paid;
+    bool paid;
     cout << "Name: ";
     getline(cin, name);
     cout << "Birth Year: ";
     cin >> year;
-    cout << "Paid? ";
-    cin >> has_paid;
-    season_.add_player(name, year, has_paid);
+    cin.get();
+    cout << "Paid? Y or N: ";
+    getline(cin, has_paid);
+    if(has_paid == "Y" || has_paid == "y")
+        paid = true;
+    else
+        paid = false;
+    season_.add_player(name, year, paid);
     display();
   }
   else if (command == "edit") {
     string name;
     int year;
     string has_paid;
+    bool paid;
     cout << "New name: ";
     getline(cin, name);
     cout << "New birth year: ";
     cin >> year;
     cout << "Paid? ";
     cin >> has_paid;
-    season_.edit_player(name, year, has_paid);
+    if(has_paid == "Y" || has_paid == "y")
+        paid = true;
+    else
+        paid = false;
+    season_.edit_player(name, year, paid);
     display();
   }
   else if (command == "delete") {
@@ -60,6 +76,8 @@ bool UI::exec_command(const string & command, bool & done) {
     cout << "New Season Year: ";
     cin >> year;
     season_.new_season(year);
+    cout << "HERE" << endl;
+    cin.get();
     display();
   }
   else if (command == "stop") {
@@ -90,7 +108,7 @@ void UI::display() {
   for (int i = 0; i < 35; ++i) {
     cout << "-";
   }
-  
+
   cout << endl;
   cout << "Type 'help' for a list of commands" << endl;
   cout << ">> ";
@@ -110,11 +128,14 @@ void UI::start() {
       getline(cin, input);
       transform(input.begin(), input.end(), input.begin(), ::tolower);
       if (input == "y" || input == "yes") {
-        if (!exec_command("new"))
+        cout << "Okay" << endl;
+        bool temp = true;
+        if (!exec_command("new", temp))
           waiting = false;
-        else if (!run())
+        else if (!run()) {
           waiting = false;
           cout << "Failed to run" << endl;
+        }
       }
       else if (input != "n" || input != "no") {
         cout << "Please input either yes or no: ";

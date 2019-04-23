@@ -24,11 +24,13 @@ public:
   Season() : Season(2000) {}
   Season(const int & y) : current_year_(y) {}
 
-  std::map<std::string, Player>::iterator add_player(const std::string & name, const int birth_year, const std::string & status);
-  std::map<std::string, Player>::iterator edit_player(std::string new_name, int new_year, std::string new_paid);
-  std::map<std::string, Player>::iterator delete_player();
+
+  void add_player(const std::string & name, const int birth_year, const bool & status);
+  void edit_player(std::string new_name, int new_year, bool new_paid);
+  void delete_player();
 
 
+  void new_season(int new_year);
   void display();
   std::string get_key(const std::string & name);
   std::string get_first(const std::string & name);

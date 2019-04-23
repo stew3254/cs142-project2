@@ -4,31 +4,34 @@ using namespace std;
 
 typedef map<string, Player> PlayerMap;
 
+//starts a new season
+void Season::new_season(int new_year)
+{
+  int current_year_ = new_year;
+  players_.clear();
+  current_player_ = players_.end();
+  current_player_pos_ = 0;
+}
+
 //Adds a player to the player map
-PlayerMap::iterator Season::add_player(const string & name,
-const int birth_year, const string & status) {
-  map<string,Player>::iterator new_entry_;
+void Season::add_player(const string & name, const int birth_year, const bool & status) {
+
   if (get_league(birth_year) != -1) {
-    auto entry = players_.insert({get_key(name),
-        {get_first(name), get_last(name), birth_year, paid(status)}});
-    new_entry_ = entry.first;
+    auto entry = players_.insert({get_key(name), {get_first(name), get_last(name), birth_year, status}});
+    current_player_ = entry.first;
   }
-  else {
-    new_entry_ = players_.end();
-  }
-  return new_entry_;
 }
 
 //Edits a player by deleting that player and adds a new player with the edited info
-PlayerMap::iterator Season::edit_player(string new_name, int new_year, string new_paid) {
+
+void Season::edit_player(string new_name, int new_year, bool new_paid) {
     delete_player();
-    return add_player(new_name, new_year, new_paid);
+    add_player(new_name, new_year, new_paid);
 }
 
-PlayerMap::iterator Season::delete_player() {
-   players_.erase(current_player_->first);
-   ++current_player_;
-   return current_player_;
+void Season::delete_player() {
+    players_.erase(current_player_->first);
+    next_player();
 }
 
 //Returns a key to the player in the map
@@ -101,7 +104,7 @@ bool Season::open(const string & file) {
   string first_name;
   string last_name;
   int year;
-  string status;
+  bool status;
   string temp;
 
   in >> current_year_;
