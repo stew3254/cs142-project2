@@ -1,4 +1,4 @@
-#include "soccer.h"
+ls#include "soccer.h"
 
 using namespace std;
 
@@ -15,6 +15,7 @@ const int birth_year, const string & status) {
   else
     cout << "This player does not fit the age requirement" << endl;
     new_entry_ = players_.end();
+  }
   return new_entry_;
 }
 
@@ -126,6 +127,7 @@ bool Season::open(const string & file) {
   }
   //Initialize the current player
   current_player_ = players_.begin();
+  current_player_pos_ = 1;
   return true;
 }
 

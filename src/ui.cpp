@@ -2,11 +2,20 @@
 
 using namespace std;
 
-bool UI::exec_command(string command) {
+bool UI::exec_command(const string & command, bool & done) {
   if (command == "help") {
     cout << "Commands:" << endl;
     cout << "\t* next - displays the next player" << endl;
     cout << "\t* previous - displays the previous player" << endl;
+    //cout << "\t* add - adds a player" << endl;
+    //cout << "\t* edit - edits the current player" << endl;
+    //cout << "\t* delete - deletes the current player" << endl;
+    //cout << "\t* new - starts a new season" << endl;
+    //cout << "\t* stats - display season statistics" << endl;
+    //cout << "\t* print - prints the players to a file" << endl;
+    //cout << "\t* search - searches for a player" << endl;
+    //cout << "\t* exit - exits the search view" << endl;
+    //cout << "\t* stop - stops the program" << endl;
   }
   else if (command == "next") {
     season_.next_player();
@@ -16,6 +25,9 @@ bool UI::exec_command(string command) {
     season_.previous_player();
     display();
   }
+  else if (command == "stop") {
+    done = true;
+  }
   else {
     return false;
   }
@@ -23,13 +35,18 @@ bool UI::exec_command(string command) {
 }
 
 void UI::display() {
-  system("clear || cls");
+  //system("clear || cls");
   cout << season_.year() << " Season" << endl;
 
   for (int i = 0; i < 35; ++i) {
     cout << "-";
   }
   cout << endl;
+  cout << "Player (" << season_.get_current_pos() << "/" << season_.get_player_count() << "):" << endl;
+  cout << "\tName: " << endl;
+  cout << "\tBirth Year: " << endl;
+  cout << "\tLeague: " << endl;
+  cout << "\tPaid: " << endl;
 
   season_.display();
 
@@ -39,6 +56,7 @@ void UI::display() {
   
   cout << endl;
   cout << "Type 'help' for a list of commands" << endl;
+  cout << ">> ";
 }
 
 void UI::start() {
@@ -71,15 +89,12 @@ void UI::start() {
 
 bool UI::run() {
   string input;
-  bool exit = false;
+  bool done = false;
   display();
-  cout << ">> ";
-  while (!exit && cin >> input) {
-    if (input == "exit")
-      exit = true;
-    else if (!exec_command(input))
+  while (!done && cin >> input) {
+    if (!exec_command(input, done))
       cout << "Failed to run command: " + input << endl;
-    if (!exit)
+    if (!done)
       cout << ">> ";
   }
   return true;
