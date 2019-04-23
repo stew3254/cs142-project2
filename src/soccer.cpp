@@ -2,16 +2,32 @@
 
 using namespace std;
 
-//adds a player to the player map
-map<string, Player>::iterator Season::add_player(const string & name,
-    const int birth_year, const string & status) {
+typedef map<string, Player> PlayerMap;
+
+//Adds a player to the player map
+PlayerMap::iterator Season::add_player(const string & name,
+const int birth_year, const string & status) {
   map<string,Player>::iterator new_entry_;
-  if (get_league(birth_year) != -1){
+  if (get_league(birth_year) != -1) {
     auto entry = players_.insert({get_key(name),
         {get_first(name), get_last(name), birth_year, paid(status)}});
     new_entry_ = entry.first;
   }
+  else
+    new_entry_ = players_.end();
   return new_entry_;
+}
+
+//Edits a player by deleting that player and adds a new player with the edited info
+PlayerMap::iterator Season::edit_player(string new_name, int new_year, string new_paid) {
+    delete_player();
+    return add_player(new_name, new_year, new_paid);
+}
+
+PlayerMap::iterator Season::delete_player() {
+   players_.erase(current_player_->first);
+   ++current_player_;
+   return current_player_;
 }
 
 //Returns a key to the player in the map
@@ -58,7 +74,7 @@ string Season::get_last(const string & name) {
 }
 
 //gets the league the player is in
-int Season::get_league(const int birth_year){
+int Season::get_league(const int birth_year) {
   const int age = (current_year_ - birth_year);
   if (age > 4 && age < 6)
     return 6;
