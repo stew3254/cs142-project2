@@ -13,8 +13,9 @@ const int birth_year, const string & status) {
         {get_first(name), get_last(name), birth_year, paid(status)}});
     new_entry_ = entry.first;
   }
-  else
+  else {
     new_entry_ = players_.end();
+  }
   return new_entry_;
 }
 
