@@ -1,8 +1,24 @@
+
 #include "soccer.h"
 
 using namespace std;
 
 typedef map<string, Player> PlayerMap;
+
+
+
+//returns a pointer to a Player struct which contains the first and last names, year of birth, and paid status
+Player * Season::get_player()
+{
+    cout << "well" << endl;
+    Player * player = &(current_player_ -> second);
+    //cout << player -> first << endl;
+    //cout << player -> last << endl;
+    //cout << player -> year << endl;
+    //cout << player -> paid << endl;
+    cout << "SHIT" << endl;
+    return player;
+}
 
 //starts a new season
 void Season::new_season(int new_year)

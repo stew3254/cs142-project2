@@ -30,11 +30,13 @@ public:
   void delete_player();
 
 
+  Player * get_player();
   void new_season(int new_year);
   void display();
   std::string get_key(const std::string & name);
   std::string get_first(const std::string & name);
   std::string get_last(const std::string & name);
+  PlayerMap::iterator get_current_player() {return current_player_;}
   size_t get_current_pos() {return current_player_pos_;}
   size_t get_player_count() {return players_.size();}
   int get_league(const int birth_year);
