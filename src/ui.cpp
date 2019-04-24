@@ -2,6 +2,71 @@
 
 using namespace std;
 
+//Helper function to get player details for add and edit to recycle code
+void UI::get_player_details(string & name, int & year, bool & paid) {
+  string temp;
+  string has_paid;
+  cout << "Name: ";
+  getline(cin, name);
+  bool good = false;
+  //Get a birth year
+  do {
+    cout << "Birth Year: ";
+    getline(cin, temp);
+    stringstream ss(temp);
+    ss >> year;
+    if (ss) {
+      if (season_.year() - year < 4)
+        cout << "Player must be older than 3" << endl;
+      else if (season_.year() - year > 17)
+        cout << "Player must be younger than 17" << endl;
+      else
+        good = true;
+    }
+    else {
+      cout << "Please enter a valid year" << endl;
+    }
+  } while (!good);
+  cout << "Paid? (Y/n) ";
+  good = false;
+  do {
+  getline(cin, has_paid);
+  std::transform(has_paid.begin(), has_paid.end(), has_paid.begin(), ::tolower);
+  if(has_paid == "y" || has_paid == "yes") {
+    paid = true;
+    good = true;
+  }
+  else if(has_paid == "n" || has_paid == "no") {
+    paid = false;
+    good = true;
+  }
+  else
+    cout << "Please enter yes or no" << endl;
+  } while (!good);
+}
+
+//Create a new season
+void UI::new_season() {
+    int year;
+    string temp;
+    bool good = false;
+    do {
+      cout << "New Season Year: ";
+      getline(cin, temp);
+      stringstream ss(temp);
+      ss >> year;
+      cout << year << endl;
+      if (ss) {
+        season_.new_season(year);
+        good = true;
+        display();
+      }
+      else {
+        cout << "Please enter a valid year" << endl;
+      }
+    } while (!good);
+}
+
 bool UI::exec_command(const string & command, bool & done) {
   if (command == "help") {
     cout << "Commands:" << endl;
@@ -17,7 +82,6 @@ bool UI::exec_command(const string & command, bool & done) {
     //cout << "\t* exit - exits the search view" << endl;
     cout << "\t* stop - stops the program" << endl;
   }
-
   else if (command == "delete") {
     season_.delete_player();
     display();
@@ -33,37 +97,16 @@ bool UI::exec_command(const string & command, bool & done) {
   else if (command == "add") {
     string name;
     int year;
-    string has_paid;
     bool paid;
-    cout << "Name: ";
-    getline(cin, name);
-    cout << "Birth Year: ";
-    cin >> year;
-    cin.get();
-    cout << "Paid? Y or N: ";
-    getline(cin, has_paid);
-    if(has_paid == "Y" || has_paid == "y")
-        paid = true;
-    else
-        paid = false;
+    get_player_details(name, year, paid);
     season_.add_player(name, year, paid);
     display();
   }
   else if (command == "edit") {
     string name;
     int year;
-    string has_paid;
     bool paid;
-    cout << "New name: ";
-    getline(cin, name);
-    cout << "New birth year: ";
-    cin >> year;
-    cout << "Paid? ";
-    cin >> has_paid;
-    if(has_paid == "Y" || has_paid == "y")
-        paid = true;
-    else
-        paid = false;
+    get_player_details(name, year, paid);
     season_.edit_player(name, year, paid);
     display();
   }
@@ -72,13 +115,7 @@ bool UI::exec_command(const string & command, bool & done) {
     display();
   }
   else if (command == "new") {
-    int year;
-    cout << "New Season Year: ";
-    cin >> year;
-    season_.new_season(year);
-    cout << "HERE" << endl;
-    cin.get();
-    display();
+    new_season();
   }
   else if (command == "stop") {
     done = true;
@@ -111,7 +148,6 @@ void UI::display() {
 
   cout << endl;
   cout << "Type 'help' for a list of commands" << endl;
-  cout << ">> ";
 }
 
 void UI::start() {
@@ -149,9 +185,12 @@ bool UI::run() {
   string input;
   bool done = false;
   display();
+  cout << ">> ";
   while (!done && getline(cin, input)) {
     if (!exec_command(input, done))
       cout << "Failed to run command: " + input << endl;
+    if (!done)
+      cout << ">> ";
   }
   return true;
 }

@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <initializer_list>
 #include <iostream>
+#include <sstream>
 #include <string>
 #include "soccer.h"
 
@@ -15,6 +16,8 @@ public:
   bool run();
 
 private:
+  void get_player_details(std::string & name, int & year, bool & paid);
+  void new_season();
   Season season_;
 };
 
