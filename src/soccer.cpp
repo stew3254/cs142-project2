@@ -77,20 +77,20 @@ string Season::get_last(const string & name) {
   return last;
 }
 
-//gets the league the player is in
+//Gets the league the player is in
 int Season::get_league(const int birth_year) {
   const int age = (current_year_ - birth_year);
-  if (age > 4 && age < 6)
+  if (age >= 4 && age < 6)
     return 6;
-  else if (age > 5 && age < 8)
+  else if (age >= 6 && age < 8)
     return 8;
-  else if (age > 8 && age < 10)
+  else if (age >= 8 && age < 10)
     return 10;
-  else if (age > 10 && age < 12)
+  else if (age >= 10 && age < 12)
     return 12;
-  else if (age > 12 && age < 14)
+  else if (age >= 12 && age < 14)
     return 14;
-  else if (age > 14 && age < 17)
+  else if (age >= 14 && age < 17)
     return 17;
   return -1;
 }
@@ -105,13 +105,27 @@ bool Season::open(const string & file) {
   string last_name;
   int year;
   bool status;
+  stringstream year_stream;
   string temp;
 
-  in >> current_year_;
-  while (in >> first_name >> last_name >> year >> status) {
-    //Could be a bit more efficient
-    string name = first_name + " " + last_name;
-    add_player(name, year, status);
+  //Use a string stream to santize input
+  getline(in, temp);
+  year_stream.str(temp);
+  temp = "";
+
+  //If stream state is invalid fail to open the file
+  if (!year_stream)
+    return false;
+
+  year_stream >> current_year_;
+  while (getline(in, temp)) {
+    stringstream ss(temp);
+    ss >> first_name >> last_name >> year >> status;
+    if (ss) {
+      //Could be a bit more efficient
+      string name = first_name + " " + last_name;
+      add_player(name, year, status);
+    }
   }
   //Initialize the current player
   current_player_ = players_.begin();
