@@ -6,24 +6,10 @@ using namespace std;
 typedef map<string, Player> PlayerMap;
 
 
-
-//returns a pointer to a Player struct which contains the first and last names, year of birth, and paid status
-Player * Season::get_player()
-{
-    cout << "well" << endl;
-    Player * player = &(current_player_ -> second);
-    //cout << player -> first << endl;
-    //cout << player -> last << endl;
-    //cout << player -> year << endl;
-    //cout << player -> paid << endl;
-    cout << "SHIT" << endl;
-    return player;
-}
-
 //starts a new season
-void Season::new_season(int new_year)
+void Season::new_season(const int new_year)
 {
-  int current_year_ = new_year;
+  current_year_ = new_year;
   players_.clear();
   current_player_ = players_.end();
   current_player_pos_ = 0;
@@ -32,8 +18,8 @@ void Season::new_season(int new_year)
 //Adds a player to the player map
 void Season::add_player(const string & name, const int birth_year, const bool & status) {
 
-  if (get_league(birth_year) != -1) {
-    auto entry = players_.insert({get_key(name), {get_first(name), get_last(name), birth_year, status}});
+  if (get_league_(birth_year) != -1) {
+    auto entry = players_.insert({get_key_(name), {get_first_(name), get_last_(name), birth_year, status}});
     current_player_ = entry.first;
   }
 }
@@ -51,7 +37,7 @@ void Season::delete_player() {
 }
 
 //Returns a key to the player in the map
-string Season::get_key(const string & name) {
+string Season::get_key_(const string & name) {
   string key = "";
   for (int i = 0; i < name.length(); ++i) {
     if (name[i] == ' ') {
@@ -73,7 +59,7 @@ string Season::get_key(const string & name) {
 }
 
 //Gets a player's first name
-string Season::get_first(const string & name) {
+string Season::get_first_(const string & name) {
   std::string first = "";
   for (int i = 0; name[i] != ' '; ++i)
     first = first + name[i];
@@ -81,7 +67,7 @@ string Season::get_first(const string & name) {
 }
 
 //Gets a player's last name
-string Season::get_last(const string & name) {
+string Season::get_last_(const string & name) {
   string last = "";
   int space = 0;
   for (int i = 0; i < name.length(); ++i) {
@@ -94,7 +80,7 @@ string Season::get_last(const string & name) {
 }
 
 //Gets the league the player is in
-int Season::get_league(const int birth_year) {
+int Season::get_league_(const int birth_year) {
   const int age = (current_year_ - birth_year);
   if (age >= 4 && age < 6)
     return 6;
@@ -112,8 +98,8 @@ int Season::get_league(const int birth_year) {
 }
 
 //Opens the season file
-bool Season::open(const string & file) {
-  ifstream in(file);
+bool Season::open() {
+  ifstream in(file_);
   if (!in)
     return false;
 
@@ -146,6 +132,22 @@ bool Season::open(const string & file) {
   //Initialize the current player
   current_player_ = players_.begin();
   current_player_pos_ = 1;
+  return true;
+}
+
+bool Season::save() {
+  ofstream out(file_);
+  if (!out)
+    return false;
+
+  out << current_year_ << endl;
+
+  for (auto e: players_) {
+    out << e.second.first << ' ' << e.second.last << ' ';
+    out << e.second.year << ' ' << e.second.paid << endl;
+  }
+  out.close();
+
   return true;
 }
 
