@@ -23,30 +23,40 @@ class Season {
 public:
   typedef std::map<std::string, Player> PlayerMap;
   Season() : Season(2000) {}
-  Season(const int & y) : current_year_(y) {}
+  Season(const int & y) : current_year_(y), file_("season.txt") {}
 
 
   void add_player(const std::string & name, const int birth_year, const bool & status);
   void edit_player(std::string new_name, int new_year, bool new_paid);
   void delete_player();
 
+  bool empty() {return players_.empty();}
 
-  void new_season(int new_year);
+  void new_season(const int new_year);
+
   void display();
-  std::string get_key(const std::string & name);
-  std::string get_first(const std::string & name);
-  std::string get_last(const std::string & name);
+
   size_t get_current_pos() {return current_player_pos_;}
   size_t get_player_count() {return players_.size();}
-  int get_league(const int birth_year);
+
   void next_player();
   void previous_player();
-  bool open(const std::string & file);
+
+  bool open();
+  bool save();
+  
   bool paid(std::string status);
+
   int year() {return current_year_;}
 
 private:
+  std::string get_key_(const std::string & name);
+  std::string get_first_(const std::string & name);
+  std::string get_last_(const std::string & name);
+  int get_league_(const int birth_year);
+
   int current_year_;
+  std::string file_;
   PlayerMap players_;
   PlayerMap::iterator current_player_;
   size_t current_player_pos_;
@@ -57,24 +67,28 @@ inline void Season::display() {
 }
 
 inline void Season::next_player() {
-  if (current_player_ != --(players_.end())) {
-    ++current_player_;
-    ++current_player_pos_;
-  }
-  else {
-    current_player_ = players_.begin();
-    current_player_pos_ = 1;
+  if (players_.size() != 0) {
+    if (current_player_ != --(players_.end())) {
+      ++current_player_;
+      ++current_player_pos_;
+    }
+    else {
+      current_player_ = players_.begin();
+      current_player_pos_ = 1;
+    }
   }
 }
 
 inline void Season::previous_player() {
-  if (current_player_ != players_.begin()) {
-    --current_player_;
-    --current_player_pos_;
-  }
-  else {
-    current_player_ = --(players_.end());
-    current_player_pos_ = players_.size();
+  if (players_.size() != 0) {
+    if (current_player_ != players_.begin()) {
+      --current_player_;
+      --current_player_pos_;
+    }
+    else {
+      current_player_ = --(players_.end());
+      current_player_pos_ = players_.size();
+    }
   }
 }
 

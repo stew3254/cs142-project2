@@ -55,11 +55,9 @@ void UI::new_season() {
       getline(cin, temp);
       stringstream ss(temp);
       ss >> year;
-      cout << year << endl;
       if (ss) {
         season_.new_season(year);
         good = true;
-        display();
       }
       else {
         cout << "Please enter a valid year" << endl;
@@ -81,10 +79,6 @@ bool UI::exec_command(const string & command, bool & done) {
     //cout << "\t* search - searches for a player" << endl;
     //cout << "\t* exit - exits the search view" << endl;
     cout << "\t* stop - stops the program" << endl;
-  }
-  else if (command == "delete") {
-    season_.delete_player();
-    display();
   }
   else if (command == "next") {
     season_.next_player();
@@ -116,9 +110,11 @@ bool UI::exec_command(const string & command, bool & done) {
   }
   else if (command == "new") {
     new_season();
+    display();
   }
   else if (command == "stop") {
     done = true;
+    season_.save();
   }
   else {
     return false;
@@ -134,13 +130,17 @@ void UI::display() {
     cout << "-";
   }
   cout << endl;
-  cout << "Player (" << season_.get_current_pos() << "/" << season_.get_player_count() << "):" << endl;
-  cout << "\tName: " << endl;
-  cout << "\tBirth Year: " << endl;
-  cout << "\tLeague: " << endl;
-  cout << "\tPaid: " << endl;
-
-  season_.display();
+  if (season_.empty()) {
+    cout << "No players to display" << endl;
+  }
+  else {
+    cout << "Player (" << season_.get_current_pos() << "/" << season_.get_player_count() << "):" << endl;
+    cout << "\tName: " << endl;
+    cout << "\tBirth Year: " << endl;
+    cout << "\tLeague: " << endl;
+    cout << "\tPaid: " << endl;
+    season_.display();
+  }
 
   for (int i = 0; i < 35; ++i) {
     cout << "-";
@@ -151,7 +151,8 @@ void UI::display() {
 }
 
 void UI::start() {
-  if (season_.open("season.txt")) {
+  if (season_.open()) {
+    display();
     run();
   }
   else {
@@ -164,7 +165,6 @@ void UI::start() {
       getline(cin, input);
       transform(input.begin(), input.end(), input.begin(), ::tolower);
       if (input == "y" || input == "yes") {
-        cout << "Okay" << endl;
         bool temp = true;
         if (!exec_command("new", temp))
           waiting = false;
@@ -184,7 +184,6 @@ void UI::start() {
 bool UI::run() {
   string input;
   bool done = false;
-  display();
   cout << ">> ";
   while (!done && getline(cin, input)) {
     if (!exec_command(input, done))
