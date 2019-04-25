@@ -10,15 +10,18 @@
 
 class UI {
 public:
+  UI() : isBrowsing_(true) {}
+
   bool exec_command(const std::string & command, bool & done);
   void display();
   void start();
-  bool run();
+  void run();
 
 private:
   void get_player_details(std::string & name, int & year, bool & paid);
   void new_season();
   Season season_;
+  bool isBrowsing_;
 };
 
 #endif

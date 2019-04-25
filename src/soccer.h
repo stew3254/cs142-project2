@@ -20,7 +20,6 @@ struct Player {
 };
 
 struct Stat {
-
   Stat(const std::string & key) : Stat(key, 0, 0, 0) {}
   Stat(const std::string & key, const int & number, const int & yes, const int & no) : league(key), players(number), paid(yes), not_paid(no) {}
 

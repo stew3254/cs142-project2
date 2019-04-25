@@ -73,11 +73,15 @@ bool UI::exec_command(const string & command, bool & done) {
     cout << "\t* add - adds a player" << endl;
     cout << "\t* edit - edits the current player" << endl;
     cout << "\t* delete - deletes the current player" << endl;
-    cout << "\t* new - starts a new season" << endl;
-    //cout << "\t* stats - display season statistics" << endl;
-    //cout << "\t* print - prints the players to a file" << endl;
     //cout << "\t* search - searches for a player" << endl;
-    //cout << "\t* exit - exits the search view" << endl;
+    if (isBrowsing_) {
+      cout << "\t* new - starts a new season" << endl;
+      cout << "\t* stats - display season statistics" << endl;
+    }
+    else {
+      //cout << "\t* print - prints the players to a file" << endl;
+      cout << "\t* exit - exits the search view" << endl;
+    }
     cout << "\t* stop - stops the program" << endl;
   }
   else if (command == "next") {
@@ -108,9 +112,15 @@ bool UI::exec_command(const string & command, bool & done) {
     season_.delete_player();
     display();
   }
-  else if (command == "new") {
+  else if (command == "new" && isBrowsing_) {
     new_season();
     display();
+  }
+  else if (command == "stats" && isBrowsing_) {
+    display();
+  }
+  else if (command == "exit" && !isBrowsing_) {
+    isBrowsing_ = true;
   }
   else if (command == "stop") {
     done = true;
@@ -159,6 +169,7 @@ void UI::start() {
     //Waiting for input
     bool waiting = true;
     string input;
+    cout << "No previous seasons exist." << endl;
     cout << "Would you like to start a new season? (y/n): ";
     //Get input, make it all lowercase and then see if the user input yes or no
     do {
@@ -166,22 +177,19 @@ void UI::start() {
       transform(input.begin(), input.end(), input.begin(), ::tolower);
       if (input == "y" || input == "yes") {
         bool temp = true;
-        if (!exec_command("new", temp))
+        if (exec_command("new", temp))
           waiting = false;
-        else if (!run()) {
-          waiting = false;
-          cout << "Failed to run" << endl;
-        }
       }
-      else if (input != "n" || input != "no") {
+      else if (input != "y" || input != "yes" || input != "n" || input != "no") {
         cout << "Please input either yes or no: ";
       }
     } while (waiting);
+    run();
   }
 }
 
 //Run the UI
-bool UI::run() {
+void UI::run() {
   string input;
   bool done = false;
   cout << ">> ";
@@ -191,5 +199,4 @@ bool UI::run() {
     if (!done)
       cout << ">> ";
   }
-  return true;
 }
