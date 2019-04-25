@@ -4,7 +4,46 @@
 using namespace std;
 
 typedef map<string, Player> PlayerMap;
+typedef map<string, Stat> StatMap;
 
+void Season::update_stats() {
+
+    stats_.clear();
+    stats_.insert({"total", {"total"}});
+    for(auto itr = players_.begin(); itr != players_.end(); ++itr)
+    {
+        string league = "U" + to_string(get_league_(itr -> second.year));
+        if(stats_.find(league) != stats_.end())
+        {
+            add_stat(league, (itr -> second.paid));
+        }
+        else
+        {
+            stats_.insert({league, {league}});
+            add_stat(league, (itr -> second.paid));
+        }
+    }
+}
+
+void Season::add_stat(std::string key, bool status) {
+
+    auto itr = stats_.find(key);
+    auto total = stats_.find("total");
+    if(status == true)
+    {
+        ++(itr -> second.players);
+        ++(itr -> second.paid);
+        ++(total -> second.players);
+        ++(total -> second.paid);
+    }
+    else
+    {
+        ++(itr -> second.players);
+        ++(itr -> second.not_paid);
+        ++(total -> second.players);
+        ++(total -> second.not_paid);
+    }
+}
 
 //starts a new season
 void Season::new_season(const int new_year)
