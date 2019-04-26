@@ -213,6 +213,12 @@ bool Season::save() {
   return true;
 }
 
+void Season::search() {
+  //for(auto itr = players_.begin(); itr != players_.end(); ++itr) {
+  //  cout << itr->first << endl;
+  //}
+}
+
 //Passed by value because it gets changed and I'm not sure if
 //the original should be changed or not
 bool Season::paid(std::string status) {

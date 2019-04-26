@@ -19,6 +19,7 @@ public:
 
 private:
   void get_player_details(std::string & name, int & year, bool & paid);
+  void search();
   void new_season();
   Season season_;
   bool isBrowsing_;

@@ -2,6 +2,37 @@
 
 using namespace std;
 
+void UI::display() {
+  //system("clear || cls");
+  cout << season_.year() << " Season: ";
+  if(isBrowsing_)
+    cout << "Browsing View" << endl;
+  else
+    cout << "Search View" << endl;
+
+  for (int i = 0; i < 35; ++i) {
+    cout << "-";
+  }
+  cout << endl;
+  if (season_.empty()) {
+    cout << "No players to display" << endl;
+  }
+  else {
+    cout << "Player (" << season_.get_current_pos() << "/" << season_.get_player_count() << "):" << endl;
+    cout << "\tName: " << season_.display_name() << endl;
+    cout << "\tBirth Year: " << season_.display_year() << endl;
+    cout << "\tLeague: " << season_.display_league() << endl;
+    cout << "\tPaid: " << season_.display_status() << endl;
+  }
+
+  for (int i = 0; i < 35; ++i) {
+    cout << "-";
+  }
+
+  cout << endl;
+  cout << "Type 'help' for a list of commands" << endl;
+}
+
 //Helper function to get player details for add and edit to recycle code
 void UI::get_player_details(string & name, int & year, bool & paid) {
   string temp;
@@ -27,9 +58,9 @@ void UI::get_player_details(string & name, int & year, bool & paid) {
       cout << "Please enter a valid year" << endl;
     }
   } while (!good);
+  do {
   cout << "Paid? (Y/n) ";
   good = false;
-  do {
   getline(cin, has_paid);
   std::transform(has_paid.begin(), has_paid.end(), has_paid.begin(), ::tolower);
   if(has_paid == "y" || has_paid == "yes") {
@@ -65,6 +96,13 @@ void UI::new_season() {
     } while (!good);
 }
 
+void UI::search() {
+  string name;
+  int year;
+  bool has_paid;
+  get_player_details(name, year, has_paid);
+}
+
 bool UI::exec_command(const string & command, bool & done) {
   if (command == "help") {
     cout << "Commands:" << endl;
@@ -73,8 +111,7 @@ bool UI::exec_command(const string & command, bool & done) {
     cout << "\t* add - adds a player" << endl;
     cout << "\t* edit - edits the current player" << endl;
     cout << "\t* delete - deletes the current player" << endl;
-<<<<<<< HEAD
-    //cout << "\t* search - searches for a player" << endl;
+    cout << "\t* search - searches for a player" << endl;
     if (isBrowsing_) {
       cout << "\t* new - starts a new season" << endl;
       cout << "\t* stats - display season statistics" << endl;
@@ -83,14 +120,7 @@ bool UI::exec_command(const string & command, bool & done) {
       //cout << "\t* print - prints the players to a file" << endl;
       cout << "\t* exit - exits the search view" << endl;
     }
-=======
-    cout << "\t* new - starts a new season" << endl;
-    cout << "\t* stats - display season statistics" << endl;
-    //cout << "\t* print - prints the players to a file" << endl;
-    //cout << "\t* search - searches for a player" << endl;
-    //cout << "\t* exit - exits the search view" << endl;
-    cout << "\t* save - saves any changes made" << endl;
->>>>>>> 572ec5bed41d95416b4fafdf56643bd045217285
+    cout << "\t* save - saves the program" << endl;
     cout << "\t* stop - stops the program" << endl;
   }
   else if (command == "next") {
@@ -126,20 +156,6 @@ bool UI::exec_command(const string & command, bool & done) {
     display();
   }
   else if (command == "stats" && isBrowsing_) {
-    display();
-  }
-  else if (command == "exit" && !isBrowsing_) {
-    isBrowsing_ = true;
-  }
-  else if (command == "stop") {
-    done = true;
-    season_.save();
-  }
-  else if (command == "save") {
-    season_.save();
-    display();
-  }
-  else if (command == "stats") {
     season_.update_stats();
     auto itr = season_.get_stats();
     auto end_itr = season_.get_end_stat();
@@ -150,40 +166,29 @@ bool UI::exec_command(const string & command, bool & done) {
         cout << itr -> first << " Not Paid: " << itr -> second.not_paid << endl;
         cout << endl;
     }
+    //display();
+  }
+  else if (command == "search") {
+    isBrowsing_ = false;
+    search();
     display();
-
+  }
+  else if (command == "exit" && !isBrowsing_) {
+    isBrowsing_ = true;
+    display();
+  }
+  else if (command == "save") {
+    season_.save();
+    display();
+  }
+  else if (command == "stop") {
+    done = true;
+    season_.save();
   }
   else {
     return false;
   }
   return true;
-}
-
-void UI::display() {
-  //system("clear || cls");
-  cout << season_.year() << " Season" << endl;
-
-  for (int i = 0; i < 35; ++i) {
-    cout << "-";
-  }
-  cout << endl;
-  if (season_.empty()) {
-    cout << "No players to display" << endl;
-  }
-  else {
-    cout << "Player (" << season_.get_current_pos() << "/" << season_.get_player_count() << "):" << endl;
-    cout << "\tName: " << season_.display_name() << endl;
-    cout << "\tBirth Year: " << season_.display_year() << endl;
-    cout << "\tLeague: " << season_.display_league() << endl;
-    cout << "\tPaid: " << season_.display_status() << endl;
-  }
-
-  for (int i = 0; i < 35; ++i) {
-    cout << "-";
-  }
-
-  cout << endl;
-  cout << "Type 'help' for a list of commands" << endl;
 }
 
 void UI::start() {
@@ -203,14 +208,18 @@ void UI::start() {
       transform(input.begin(), input.end(), input.begin(), ::tolower);
       if (input == "y" || input == "yes") {
         bool temp = true;
-        if (exec_command("new", temp))
+        if (exec_command("new", temp)) {
+          waiting = false;
+          run();
+        }
+      }
+      else if (input == "n" || input == "no") {
           waiting = false;
       }
-      else if (input != "y" || input != "yes" || input != "n" || input != "no") {
+      else {
         cout << "Please input either yes or no: ";
       }
     } while (waiting);
-    run();
   }
 }
 
