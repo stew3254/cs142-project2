@@ -7,17 +7,114 @@ typedef map<string, Player> PlayerMap;
 typedef map<string, Stat> StatMap;
 
 
+void Season::print_players(const string & FileName) {
+
+    update_stats();
+    vector<Player> players_U6;
+    vector<Player> players_U8;
+    vector<Player> players_U10;
+    vector<Player> players_U12;
+    vector<Player> players_U14;
+    vector<Player> players_U17;
+    cout << "GOT HERE" << endl;
+    auto league_itr = stats_.begin();
+    auto itr = players_.begin();
+    for(itr; league_itr != stats_.end(); ++itr)
+    {
+        if(("U" + to_string(get_league_(itr -> second.year))) == league_itr -> first)
+        {
+            if(league_itr -> first == "U6")
+                players_U6.push_back(itr -> second);
+            else if(league_itr -> first == "U8")
+                players_U8.push_back(itr -> second);
+            else if(league_itr -> first == "U10")
+                players_U10.push_back(itr -> second);
+            else if(league_itr -> first == "U12")
+                players_U12.push_back(itr -> second);
+            else if(league_itr -> first == "U14")
+                players_U14.push_back(itr -> second);
+            else if(league_itr -> first == "U17")
+                players_U17.push_back(itr -> second);
+        }
+        if(itr == players_.end())
+        {
+            itr = players_.begin();
+            ++league_itr;
+        }
+    }
+    cout << "And now Here" << endl;
+    league_itr = stats_.begin();
+    ++league_itr;
+    ofstream OutData;
+    OutData.open(FileName);
+    OutData << "Format: Name, Year of Birth, Paid Status" << endl;
+    while(league_itr != stats_.end()){
+        if(league_itr -> first == "U6") {
+            OutData << "League: U6" << endl;
+            auto itr = players_U6.begin();
+            while(itr != players_U6.end()) {
+                OutData << itr -> first << itr -> last << " " << itr -> year << " " << itr -> paid << endl;
+                ++itr;
+            }
+            ++league_itr;
+        }
+        else if(league_itr -> first == "U8"){
+            OutData << "League: U8" << endl;
+            auto itr = players_U8.begin();
+            while(itr != players_U8.end()) {
+                OutData << itr -> first << itr -> last << " " << itr -> year << " " << itr -> paid << endl;
+                ++itr;
+            }
+            ++league_itr;
+        }
+        else if(league_itr -> first == "U10") {
+            OutData << "League: U10" << endl;
+            auto itr = players_U10.begin();
+            while(itr != players_U10.end()) {
+                OutData << itr -> first << itr -> last << " " << itr -> year << " " << itr -> paid << endl;
+                ++itr;
+            }
+            ++league_itr;
+        }
+        else if(league_itr -> first == "U12") {
+            OutData << "League: U12" << endl;
+            auto itr = players_U12.begin();
+            while(itr != players_U12.end()) {
+                OutData << itr -> first << itr -> last << " " << itr -> year << " " << itr -> paid << endl;
+                ++itr;
+            }
+            ++league_itr;
+        }
+        else if(league_itr -> first == "U14") {
+            OutData << "League: U14" << endl;
+            auto itr = players_U14.begin();
+            while(itr != players_U14.end()) {
+                OutData << itr -> first << itr -> last << " " << itr -> year << " " << itr -> paid << endl;
+                ++itr;
+            }
+            ++league_itr;
+        }
+        else if(league_itr -> first == "U17") {
+            OutData << "League: U17" << endl;
+            auto itr = players_U17.begin();
+            while(itr != players_U17.end()) {
+                OutData << itr -> first << itr -> last << " " << itr -> year << " " << itr -> paid << endl;
+                ++itr;
+            }
+            ++league_itr;
+        }
+    }
+    cout << "Finished Printing" << endl;
+}
 string Season::display_name() {
-    string name = (current_player_ -> second.first) + (current_player_ -> second.last);
-    return name;
+    return (current_player_ -> second.first) + (current_player_ -> second.last);
+
  }
 string Season::display_year() {
-    string year = to_string(current_player_ -> second.year);
-    return year;
+    return  to_string(current_player_ -> second.year);
 }
 string Season::display_league() {
-    string league = "U" + to_string(get_league_(current_player_ -> second.year));
-    return league;
+    return ("U" + to_string(get_league_(current_player_ -> second.year)));
 }
 string Season::display_status() {
     string status;

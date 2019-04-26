@@ -7,6 +7,7 @@
 #include <sstream>
 #include <map>
 #include <string>
+#include <vector>
 
 struct Player {
   Player() : Player("No ", "Name", 2000, false) {}
@@ -37,7 +38,7 @@ public:
   Season() : Season(2000) {}
   Season(const int & y) : current_year_(y), file_("season.txt") {}
 
-
+  void print_players(const std::string & FileName);
 
   void update_stats();
   void add_player(const std::string & name, const int birth_year, const bool & status);

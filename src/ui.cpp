@@ -75,7 +75,7 @@ bool UI::exec_command(const string & command, bool & done) {
     cout << "\t* delete - deletes the current player" << endl;
     cout << "\t* new - starts a new season" << endl;
     cout << "\t* stats - display season statistics" << endl;
-    //cout << "\t* print - prints the players to a file" << endl;
+    cout << "\t* print - prints the players to a file" << endl;
     //cout << "\t* search - searches for a player" << endl;
     //cout << "\t* exit - exits the search view" << endl;
     cout << "\t* save - saves any changes made" << endl;
@@ -133,8 +133,15 @@ bool UI::exec_command(const string & command, bool & done) {
         cout << endl;
     }
     display();
-
   }
+  else if (command == "print") {
+    cout << "Please input a file name to read to" << endl;
+    string FileName;
+    cin >> FileName;
+    season_.print_players(FileName);
+    display();
+  }
+
   else {
     return false;
   }
