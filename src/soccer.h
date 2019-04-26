@@ -12,7 +12,6 @@ struct Player {
   Player() : Player("No ", "Name", 2000, false) {}
   Player(const std::string & f, const std::string & l, const int & b, const bool & p) :
       first(f), last(l), year(b), paid(p) {}
-
   std::string first;
   std::string last;
   int year;
@@ -37,31 +36,29 @@ public:
   Season() : Season(2000) {}
   Season(const int & y) : current_year_(y), file_("season.txt") {}
 
-  void update_stats();
-  void add_stat(std::string, bool status);
 
+
+  void update_stats();
   void add_player(const std::string & name, const int birth_year, const bool & status);
   void edit_player(std::string new_name, int new_year, bool new_paid);
   void delete_player();
-
   bool empty() {return players_.empty();}
-
   void new_season(const int new_year);
 
+  std::string display_name();
+  std::string display_year();
+  std::string display_league();
+  std::string display_status();
 
-  void display();
-
+  StatMap::iterator get_end_stat(){return stats_.end();}
+  StatMap::iterator get_stats(){return stats_.begin();}
   PlayerMap::iterator get_current_player() {return current_player_;}
-
   size_t get_current_pos() {return current_player_pos_;}
   size_t get_player_count() {return players_.size();}
-
   void next_player();
   void previous_player();
-
   bool open();
   bool save();
-
   bool paid(std::string status);
   int year() {return current_year_;}
 
@@ -70,6 +67,7 @@ private:
   std::string get_first_(const std::string & name);
   std::string get_last_(const std::string & name);
   int get_league_(const int birth_year);
+  void add_stat(std::string, bool status);
 
   int current_year_;
   std::string file_;
@@ -78,10 +76,6 @@ private:
   PlayerMap::iterator current_player_;
   size_t current_player_pos_;
 };
-
-inline void Season::display() {
-  std::cout << current_player_->second.first << ' ' << current_player_->second.last << std::endl;
-}
 
 inline void Season::next_player() {
   if (players_.size() != 0) {

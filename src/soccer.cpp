@@ -6,10 +6,33 @@ using namespace std;
 typedef map<string, Player> PlayerMap;
 typedef map<string, Stat> StatMap;
 
+
+string Season::display_name() {
+    string name = (current_player_ -> second.first) + (current_player_ -> second.last);
+    return name;
+ }
+string Season::display_year() {
+    string year = to_string(current_player_ -> second.year);
+    return year;
+}
+string Season::display_league() {
+    string league = "U" + to_string(get_league_(current_player_ -> second.year));
+    return league;
+}
+string Season::display_status() {
+    string status;
+    if(current_player_ -> second.paid)
+        status = "Paid";
+    else
+        status = "Not Paid";
+    return status;
+}
+
+
 void Season::update_stats() {
 
     stats_.clear();
-    stats_.insert({"total", {"total"}});
+    stats_.insert({"Total", {"Total"}});
     for(auto itr = players_.begin(); itr != players_.end(); ++itr)
     {
         string league = "U" + to_string(get_league_(itr -> second.year));
@@ -28,7 +51,7 @@ void Season::update_stats() {
 void Season::add_stat(std::string key, bool status) {
 
     auto itr = stats_.find(key);
-    auto total = stats_.find("total");
+    auto total = stats_.find("Total");
     if(status == true)
     {
         ++(itr -> second.players);
