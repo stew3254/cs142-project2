@@ -74,17 +74,18 @@ bool UI::exec_command(const string & command, bool & done) {
     cout << "\t* edit - edits the current player" << endl;
     cout << "\t* delete - deletes the current player" << endl;
     cout << "\t* new - starts a new season" << endl;
-    //cout << "\t* stats - display season statistics" << endl;
+    cout << "\t* stats - display season statistics" << endl;
     //cout << "\t* print - prints the players to a file" << endl;
     //cout << "\t* search - searches for a player" << endl;
     //cout << "\t* exit - exits the search view" << endl;
+    cout << "\t* save - saves any changes made" << endl;
     cout << "\t* stop - stops the program" << endl;
   }
   else if (command == "next") {
     season_.next_player();
     display();
   }
-  else if (command == "previous") {
+  else if (command == "previous" || command == "prev") {
     season_.previous_player();
     display();
   }
@@ -116,6 +117,24 @@ bool UI::exec_command(const string & command, bool & done) {
     done = true;
     season_.save();
   }
+  else if (command == "save") {
+    season_.save();
+    display();
+  }
+  else if (command == "stats") {
+    season_.update_stats();
+    auto itr = season_.get_stats();
+    auto end_itr = season_.get_end_stat();
+    for(itr; itr != end_itr; ++itr)
+    {
+        cout << itr -> first << " Players: " << itr -> second.players << endl;
+        cout << itr -> first << " Paid: " << itr -> second.paid << endl;
+        cout << itr -> first << " Not Paid: " << itr -> second.not_paid << endl;
+        cout << endl;
+    }
+    display();
+
+  }
   else {
     return false;
   }
@@ -135,11 +154,10 @@ void UI::display() {
   }
   else {
     cout << "Player (" << season_.get_current_pos() << "/" << season_.get_player_count() << "):" << endl;
-    cout << "\tName: " << endl;
-    cout << "\tBirth Year: " << endl;
-    cout << "\tLeague: " << endl;
-    cout << "\tPaid: " << endl;
-    season_.display();
+    cout << "\tName: " << season_.display_name() << endl;
+    cout << "\tBirth Year: " << season_.display_year() << endl;
+    cout << "\tLeague: " << season_.display_league() << endl;
+    cout << "\tPaid: " << season_.display_status() << endl;
   }
 
   for (int i = 0; i < 35; ++i) {
