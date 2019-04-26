@@ -20,7 +20,6 @@ struct Player {
 };
 
 struct Stat {
-
   Stat(const std::string & key) : Stat(key, 0, 0, 0) {}
   Stat(const std::string & key, const int & number, const int & yes, const int & no) : league(key), players(number), paid(yes), not_paid(no) {}
 
@@ -41,10 +40,13 @@ public:
   void print_players(const std::string & FileName);
 
   void update_stats();
+
   void add_player(const std::string & name, const int birth_year, const bool & status);
   void edit_player(std::string new_name, int new_year, bool new_paid);
   void delete_player();
+
   bool empty() {return players_.empty();}
+
   void new_season(const int new_year);
 
   std::string display_name();
@@ -57,11 +59,15 @@ public:
   PlayerMap::iterator get_current_player() {return current_player_;}
   size_t get_current_pos() {return current_player_pos_;}
   size_t get_player_count() {return players_.size();}
+
   void next_player();
   void previous_player();
+
   bool open();
   bool save();
+
   bool paid(std::string status);
+  void search();
   int year() {return current_year_;}
 
 private:
@@ -69,13 +75,20 @@ private:
   std::string get_first_(const std::string & name);
   std::string get_last_(const std::string & name);
   int get_league_(const int birth_year);
+
   void add_stat(std::string, bool status);
 
   int current_year_;
   std::string file_;
+
   StatMap stats_;
+
+  PlayerMap search_players_;
+  PlayerMap::iterator current_search_player_;
+
   PlayerMap players_;
   PlayerMap::iterator current_player_;
+  
   size_t current_player_pos_;
 };
 
