@@ -66,7 +66,6 @@ public:
   bool open();
   bool save();
 
-  bool paid(std::string status);
   void search();
   int year() {return current_year_;}
 

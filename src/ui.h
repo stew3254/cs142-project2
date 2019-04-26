@@ -18,6 +18,7 @@ public:
   void run();
 
 private:
+  bool check_paid(const std::string & input, bool & paid);
   void get_player_details(std::string & name, int & year, bool & paid);
   void search();
   void new_season();
