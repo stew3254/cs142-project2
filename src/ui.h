@@ -10,7 +10,7 @@
 
 class UI {
 public:
-  UI() : isBrowsing_(true) {}
+  UI() : is_browsing_(true) {}
 
   bool exec_command(const std::string & command, bool & done);
   void display();
@@ -23,7 +23,7 @@ private:
   void search();
   void new_season();
   Season season_;
-  bool isBrowsing_;
+  bool is_browsing_;
 };
 
 #endif

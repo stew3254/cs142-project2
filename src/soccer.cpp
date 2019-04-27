@@ -16,7 +16,7 @@ void Season::print_players(const string & FileName) {
     vector<Player> players_U12;
     vector<Player> players_U14;
     vector<Player> players_U17;
-    cout << "GOT HERE" << endl;
+    //cout << "GOT HERE" << endl;
     auto league_itr = stats_.begin();
     auto itr = players_.begin();
     for(itr; league_itr != stats_.end(); ++itr)
@@ -42,7 +42,7 @@ void Season::print_players(const string & FileName) {
             ++league_itr;
         }
     }
-    cout << "And now Here" << endl;
+    //cout << "And now Here" << endl;
     league_itr = stats_.begin();
     ++league_itr;
     ofstream OutData;
@@ -106,6 +106,7 @@ void Season::print_players(const string & FileName) {
     }
     cout << "Finished Printing" << endl;
 }
+
 string Season::display_name() {
     return (current_player_ -> second.first) + (current_player_ -> second.last);
 
@@ -310,8 +311,6 @@ bool Season::save() {
   return true;
 }
 
-void Season::search() {
-  //for(auto itr = players_.begin(); itr != players_.end(); ++itr) {
-  //  cout << itr->first << endl;
-  //}
+void Season::search(const string & first, const string & last, const int year,
+                    const bool search_paid, const bool paid) {
 }

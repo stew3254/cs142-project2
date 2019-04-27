@@ -5,7 +5,7 @@ using namespace std;
 void UI::display() {
   //system("clear || cls");
   cout << season_.year() << " Season: ";
-  if(isBrowsing_)
+  if(is_browsing_)
     cout << "Browsing View" << endl;
   else
     cout << "Search View" << endl;
@@ -59,12 +59,17 @@ void UI::get_player_details(string & name, int & year, bool & paid) {
     stringstream ss(temp);
     ss >> year;
     if (ss) {
-      if (season_.year() - year < 4)
+      if (season_.year() - year < 4) {
         cout << "Player must be older than 3" << endl;
-      else if (season_.year() - year > 17)
+        ss.clear();
+      }
+      else if (season_.year() - year > 17) {
         cout << "Player must be younger than 17" << endl;
-      else
+        ss.clear();
+      }
+      else {
         good = true;
+      }
     }
     else {
       cout << "Please enter a valid year" << endl;
@@ -99,6 +104,7 @@ void UI::new_season() {
       }
       else {
         cout << "Please enter a valid year" << endl;
+        ss.clear();
       }
     } while (!good);
 }
@@ -110,6 +116,7 @@ void UI::search() {
   int year = season_.year();
   string league;
   bool paid;
+  bool search_paid = true;
 
   string temp;
   stringstream ss;
@@ -161,6 +168,7 @@ void UI::search() {
     getline(cin, temp);
     if (temp.length() == 0) {
       good = true;
+      search_paid = false;
     }
     else {
       transform(temp.begin(), temp.end(), temp.begin(), ::tolower);
@@ -170,6 +178,7 @@ void UI::search() {
         cout << "Please enter yes or no" << endl;
     }
   } while(!good);
+  season_.search(first, last, year, search_paid, paid);
 }
 
 bool UI::exec_command(const string & command, bool & done) {
@@ -181,7 +190,7 @@ bool UI::exec_command(const string & command, bool & done) {
     cout << "\t* edit - edits the current player" << endl;
     cout << "\t* delete - deletes the current player" << endl;
     cout << "\t* search - searches for a player" << endl;
-    if (isBrowsing_) {
+    if (is_browsing_) {
       cout << "\t* new - starts a new season" << endl;
       cout << "\t* stats - display season statistics" << endl;
     }
@@ -220,11 +229,11 @@ bool UI::exec_command(const string & command, bool & done) {
     season_.delete_player();
     display();
   }
-  else if (command == "new" && isBrowsing_) {
+  else if (command == "new" && is_browsing_) {
     new_season();
     display();
   }
-  else if (command == "stats" && isBrowsing_) {
+  else if (command == "stats" && is_browsing_) {
     season_.update_stats();
     auto itr = season_.get_stats();
     auto end_itr = season_.get_end_stat();
@@ -238,12 +247,12 @@ bool UI::exec_command(const string & command, bool & done) {
     //display();
   }
   else if (command == "search") {
-    isBrowsing_ = false;
+    is_browsing_ = false;
     search();
     display();
   }
-  else if (command == "exit" && !isBrowsing_) {
-    isBrowsing_ = true;
+  else if (command == "exit" && !is_browsing_) {
+    is_browsing_ = true;
     display();
   }
   else if (command == "save") {

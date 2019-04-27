@@ -66,7 +66,7 @@ public:
   bool open();
   bool save();
 
-  void search();
+  void search(const std::string & first, const std::string & last, const int year, const bool search_paid, const bool paid);
   int year() {return current_year_;}
 
 private:
