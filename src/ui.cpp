@@ -5,7 +5,7 @@ using namespace std;
 void UI::display() {
   //system("clear || cls");
   cout << season_.year() << " Season: ";
-  if(is_browsing_)
+  if (is_browsing_)
     cout << "Browsing View" << endl;
   else
     cout << "Search View" << endl;
@@ -35,11 +35,11 @@ void UI::display() {
 
 bool UI::check_paid(const string & input, bool & paid) {
   bool good = false;
-    if(input == "y" || input == "yes") {
+    if (input == "y" || input == "yes") {
       paid = true;
       good = true;
     }
-    else if(input == "n" || input == "no") {
+    else if (input == "n" || input == "no") {
       paid = false;
       good = true;
     }
@@ -85,7 +85,7 @@ void UI::get_player_details(string & name, int & year, bool & paid) {
       good = true;
     else
       cout << "Please enter yes or no" << endl;
-  } while(!good);
+  } while (!good);
 }
 
 //Create a new season
@@ -177,7 +177,7 @@ void UI::search() {
       else
         cout << "Please enter yes or no" << endl;
     }
-  } while(!good);
+  } while (!good);
   season_.search(first, last, year, search_paid, paid);
 }
 
@@ -237,7 +237,7 @@ bool UI::exec_command(const string & command, bool & done) {
     season_.update_stats();
     auto itr = season_.get_stats();
     auto end_itr = season_.get_end_stat();
-    for(itr; itr != end_itr; ++itr)
+    for (itr; itr != end_itr; ++itr)
     {
         cout << itr -> first << " Players: " << itr -> second.players << endl;
         cout << itr -> first << " Paid: " << itr -> second.paid << endl;

@@ -91,30 +91,4 @@ private:
   size_t current_player_pos_;
 };
 
-inline void Season::next_player() {
-  if (players_.size() != 0) {
-    if (current_player_ != --(players_.end())) {
-      ++current_player_;
-      ++current_player_pos_;
-    }
-    else {
-      current_player_ = players_.begin();
-      current_player_pos_ = 1;
-    }
-  }
-}
-
-inline void Season::previous_player() {
-  if (players_.size() != 0) {
-    if (current_player_ != players_.begin()) {
-      --current_player_;
-      --current_player_pos_;
-    }
-    else {
-      current_player_ = --(players_.end());
-      current_player_pos_ = players_.size();
-    }
-  }
-}
-
 #endif // soccer_h_
