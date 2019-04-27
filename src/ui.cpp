@@ -33,10 +33,22 @@ void UI::display() {
   cout << "Type 'help' for a list of commands" << endl;
 }
 
+bool UI::check_paid(const string & input, bool & paid) {
+  bool good = false;
+    if(input == "y" || input == "yes") {
+      paid = true;
+      good = true;
+    }
+    else if(input == "n" || input == "no") {
+      paid = false;
+      good = true;
+    }
+  return good;
+}
+
 //Helper function to get player details for add and edit to recycle code
 void UI::get_player_details(string & name, int & year, bool & paid) {
   string temp;
-  string has_paid;
   cout << "Name: ";
   getline(cin, name);
   bool good = false;
@@ -58,22 +70,17 @@ void UI::get_player_details(string & name, int & year, bool & paid) {
       cout << "Please enter a valid year" << endl;
     }
   } while (!good);
-  do {
-  cout << "Paid? (Y/n) ";
+
   good = false;
-  getline(cin, has_paid);
-  std::transform(has_paid.begin(), has_paid.end(), has_paid.begin(), ::tolower);
-  if(has_paid == "y" || has_paid == "yes") {
-    paid = true;
-    good = true;
-  }
-  else if(has_paid == "n" || has_paid == "no") {
-    paid = false;
-    good = true;
-  }
-  else
-    cout << "Please enter yes or no" << endl;
-  } while (!good);
+  do {
+    cout << "Paid? (Y/n) ";
+    getline(cin, temp);
+    transform(temp.begin(), temp.end(), temp.begin(), ::tolower);
+    if (check_paid(temp, paid))
+      good = true;
+    else
+      cout << "Please enter yes or no" << endl;
+  } while(!good);
 }
 
 //Create a new season
@@ -97,10 +104,72 @@ void UI::new_season() {
 }
 
 void UI::search() {
-  string name;
-  int year;
-  bool has_paid;
-  get_player_details(name, year, has_paid);
+  string first;
+  string last;
+  //Used to tell if the year is supposed to be blank
+  int year = season_.year();
+  string league;
+  bool paid;
+
+  string temp;
+  stringstream ss;
+  bool good = false;
+
+  cout << "Input any search parameters you wish to fill. Leave them blank to ignore them" << endl;
+  cout << "First Name: ";
+  getline(cin, first);
+  cout << "Last Name: ";
+  getline(cin, last);
+  do {
+    cout << "Year: ";
+    getline(cin, temp);
+    if (temp.length() == 0) {
+      year = season_.year();
+      good = true;
+    }
+    else {
+      ss >> year;
+      if (!ss) {
+        cout << "Please enter a valid year" << endl;
+      }
+      else if (season_.year() - year < 4 || season_.year() > 17) {
+        cout << "Please enter a year between " << season_.year() - 4 << " and " << season_.year() - 17 << endl;
+      }
+      else {
+        good = true;
+      }
+    }
+  } while (!good);
+
+  do {
+    cout << "League (ex. U6): ";
+    getline(cin, league);
+    if (league.length() == 0) {
+      good = true;
+    }
+    else if (league.length() < 2 || (league[0] != 'U' && league[0] != 'u') || !isdigit(league[1]) ) {
+      cout << "League must be in the form 'U6' or u12" << endl;
+    }
+    else {
+      good = true;
+    }
+  } while (!good);
+
+  good = false;
+  do {
+    cout << "Paid? (Y/n) ";
+    getline(cin, temp);
+    if (temp.length() == 0) {
+      good = true;
+    }
+    else {
+      transform(temp.begin(), temp.end(), temp.begin(), ::tolower);
+      if (check_paid(temp, paid))
+        good = true;
+      else
+        cout << "Please enter yes or no" << endl;
+    }
+  } while(!good);
 }
 
 bool UI::exec_command(const string & command, bool & done) {
@@ -166,7 +235,7 @@ bool UI::exec_command(const string & command, bool & done) {
         cout << itr -> first << " Not Paid: " << itr -> second.not_paid << endl;
         cout << endl;
     }
-    //display();
+    display();
   }
   else if (command == "search") {
     isBrowsing_ = false;

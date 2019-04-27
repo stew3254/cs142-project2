@@ -315,14 +315,3 @@ void Season::search() {
   //  cout << itr->first << endl;
   //}
 }
-
-//Passed by value because it gets changed and I'm not sure if
-//the original should be changed or not
-bool Season::paid(std::string status) {
-  bool has_paid = false;
-  //Makes status all lowercase
-  std::transform(status.begin(), status.end(), status.begin(), ::tolower);
-  if (status == "paid")
-    has_paid = true;
-  return has_paid;
-}
