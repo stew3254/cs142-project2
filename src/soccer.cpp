@@ -6,6 +6,129 @@ using namespace std;
 typedef map<string, Player> PlayerMap;
 typedef map<string, Stat> StatMap;
 
+void Season::next_player() {
+  if (players_.size() != 0) {
+    if (current_player_ != --(players_.end())) {
+      ++current_player_;
+      ++current_player_pos_;
+    }
+    else {
+      current_player_ = players_.begin();
+      current_player_pos_ = 1;
+    }
+  }
+}
+
+void Season::previous_player() {
+  if (players_.size() != 0) {
+    if (current_player_ != players_.begin()) {
+      --current_player_;
+      --current_player_pos_;
+    }
+    else {
+      current_player_ = --(players_.end());
+      current_player_pos_ = players_.size();
+    }
+  }
+}
+
+void Season::print_searched(const string & FileName) {
+
+    update_stats();
+    vector<Player> players_U6;
+    vector<Player> players_U8;
+    vector<Player> players_U10;
+    vector<Player> players_U12;
+    vector<Player> players_U14;
+    vector<Player> players_U17;
+    auto league_itr = stats_.begin();
+    auto itr = search_players_.begin();
+    for (itr; league_itr != stats_.end(); ++itr)
+    {
+        if (("U" + to_string(get_league_(itr -> second.year))) == league_itr -> first)
+        {
+            if (league_itr -> first == "U6")
+                players_U6.push_back(itr -> second);
+            else if (league_itr -> first == "U8")
+                players_U8.push_back(itr -> second);
+            else if (league_itr -> first == "U10")
+                players_U10.push_back(itr -> second);
+            else if (league_itr -> first == "U12")
+                players_U12.push_back(itr -> second);
+            else if (league_itr -> first == "U14")
+                players_U14.push_back(itr -> second);
+            else if (league_itr -> first == "U17")
+                players_U17.push_back(itr -> second);
+        }
+        if (itr == search_players_.end())
+        {
+            itr = search_players_.begin();
+            ++league_itr;
+        }
+    }
+    league_itr = stats_.begin();
+    ++league_itr;
+    ofstream OutData;
+    OutData.open(FileName);
+    OutData << "Format: Name, Year of Birth, Paid Status" << endl;
+    while (league_itr != stats_.end()) {
+        if (league_itr -> first == "U6") {
+            OutData << "League: U6" << endl;
+            auto itr = players_U6.begin();
+            while (itr != players_U6.end()) {
+                OutData << itr -> first << itr -> last << " " << itr -> year << " " << itr -> paid << endl;
+                ++itr;
+            }
+            ++league_itr;
+        }
+        else if (league_itr -> first == "U8") {
+            OutData << "League: U8" << endl;
+            auto itr = players_U8.begin();
+            while (itr != players_U8.end()) {
+                OutData << itr -> first << itr -> last << " " << itr -> year << " " << itr -> paid << endl;
+                ++itr;
+            }
+            ++league_itr;
+        }
+        else if (league_itr -> first == "U10") {
+            OutData << "League: U10" << endl;
+            auto itr = players_U10.begin();
+            while (itr != players_U10.end()) {
+                OutData << itr -> first << itr -> last << " " << itr -> year << " " << itr -> paid << endl;
+                ++itr;
+            }
+            ++league_itr;
+        }
+        else if (league_itr -> first == "U12") {
+            OutData << "League: U12" << endl;
+            auto itr = players_U12.begin();
+            while (itr != players_U12.end()) {
+                OutData << itr -> first << itr -> last << " " << itr -> year << " " << itr -> paid << endl;
+                ++itr;
+            }
+            ++league_itr;
+        }
+        else if (league_itr -> first == "U14") {
+            OutData << "League: U14" << endl;
+            auto itr = players_U14.begin();
+            while (itr != players_U14.end()) {
+                OutData << itr -> first << itr -> last << " " << itr -> year << " " << itr -> paid << endl;
+                ++itr;
+            }
+            ++league_itr;
+        }
+        else if (league_itr -> first == "U17") {
+            OutData << "League: U17" << endl;
+            auto itr = players_U17.begin();
+            while (itr != players_U17.end()) {
+                OutData << itr -> first << itr -> last << " " << itr -> year << " " << itr -> paid << endl;
+                ++itr;
+            }
+            ++league_itr;
+        }
+    }
+    cout << "Finished Printing" << endl;
+}
 
 void Season::print_players(const string & FileName) {
 
@@ -16,88 +139,86 @@ void Season::print_players(const string & FileName) {
     vector<Player> players_U12;
     vector<Player> players_U14;
     vector<Player> players_U17;
-    cout << "GOT HERE" << endl;
     auto league_itr = stats_.begin();
     auto itr = players_.begin();
-    for(itr; league_itr != stats_.end(); ++itr)
+    for (itr; league_itr != stats_.end(); ++itr)
     {
-        if(("U" + to_string(get_league_(itr -> second.year))) == league_itr -> first)
+        if (("U" + to_string(get_league_(itr -> second.year))) == league_itr -> first)
         {
-            if(league_itr -> first == "U6")
+            if (league_itr -> first == "U6")
                 players_U6.push_back(itr -> second);
-            else if(league_itr -> first == "U8")
+            else if (league_itr -> first == "U8")
                 players_U8.push_back(itr -> second);
-            else if(league_itr -> first == "U10")
+            else if (league_itr -> first == "U10")
                 players_U10.push_back(itr -> second);
-            else if(league_itr -> first == "U12")
+            else if (league_itr -> first == "U12")
                 players_U12.push_back(itr -> second);
-            else if(league_itr -> first == "U14")
+            else if (league_itr -> first == "U14")
                 players_U14.push_back(itr -> second);
-            else if(league_itr -> first == "U17")
+            else if (league_itr -> first == "U17")
                 players_U17.push_back(itr -> second);
         }
-        if(itr == players_.end())
+        if (itr == players_.end())
         {
             itr = players_.begin();
             ++league_itr;
         }
     }
-    cout << "And now Here" << endl;
     league_itr = stats_.begin();
     ++league_itr;
     ofstream OutData;
     OutData.open(FileName);
     OutData << "Format: Name, Year of Birth, Paid Status" << endl;
-    while(league_itr != stats_.end()){
-        if(league_itr -> first == "U6") {
+    while (league_itr != stats_.end()) {
+        if (league_itr -> first == "U6") {
             OutData << "League: U6" << endl;
             auto itr = players_U6.begin();
-            while(itr != players_U6.end()) {
+            while (itr != players_U6.end()) {
                 OutData << itr -> first << itr -> last << " " << itr -> year << " " << itr -> paid << endl;
                 ++itr;
             }
             ++league_itr;
         }
-        else if(league_itr -> first == "U8"){
+        else if (league_itr -> first == "U8") {
             OutData << "League: U8" << endl;
             auto itr = players_U8.begin();
-            while(itr != players_U8.end()) {
+            while (itr != players_U8.end()) {
                 OutData << itr -> first << itr -> last << " " << itr -> year << " " << itr -> paid << endl;
                 ++itr;
             }
             ++league_itr;
         }
-        else if(league_itr -> first == "U10") {
+        else if (league_itr -> first == "U10") {
             OutData << "League: U10" << endl;
             auto itr = players_U10.begin();
-            while(itr != players_U10.end()) {
+            while (itr != players_U10.end()) {
                 OutData << itr -> first << itr -> last << " " << itr -> year << " " << itr -> paid << endl;
                 ++itr;
             }
             ++league_itr;
         }
-        else if(league_itr -> first == "U12") {
+        else if (league_itr -> first == "U12") {
             OutData << "League: U12" << endl;
             auto itr = players_U12.begin();
-            while(itr != players_U12.end()) {
+            while (itr != players_U12.end()) {
                 OutData << itr -> first << itr -> last << " " << itr -> year << " " << itr -> paid << endl;
                 ++itr;
             }
             ++league_itr;
         }
-        else if(league_itr -> first == "U14") {
+        else if (league_itr -> first == "U14") {
             OutData << "League: U14" << endl;
             auto itr = players_U14.begin();
-            while(itr != players_U14.end()) {
+            while (itr != players_U14.end()) {
                 OutData << itr -> first << itr -> last << " " << itr -> year << " " << itr -> paid << endl;
                 ++itr;
             }
             ++league_itr;
         }
-        else if(league_itr -> first == "U17") {
+        else if (league_itr -> first == "U17") {
             OutData << "League: U17" << endl;
             auto itr = players_U17.begin();
-            while(itr != players_U17.end()) {
+            while (itr != players_U17.end()) {
                 OutData << itr -> first << itr -> last << " " << itr -> year << " " << itr -> paid << endl;
                 ++itr;
             }
@@ -106,6 +227,7 @@ void Season::print_players(const string & FileName) {
     }
     cout << "Finished Printing" << endl;
 }
+
 string Season::display_name() {
     return (current_player_ -> second.first) + (current_player_ -> second.last);
 
@@ -118,7 +240,7 @@ string Season::display_league() {
 }
 string Season::display_status() {
     string status;
-    if(current_player_ -> second.paid)
+    if (current_player_ -> second.paid)
         status = "Paid";
     else
         status = "Not Paid";
@@ -130,15 +252,12 @@ void Season::update_stats() {
 
     stats_.clear();
     stats_.insert({"Total", {"Total"}});
-    for(auto itr = players_.begin(); itr != players_.end(); ++itr)
-    {
+    for (auto itr = players_.begin(); itr != players_.end(); ++itr) {
         string league = "U" + to_string(get_league_(itr -> second.year));
-        if(stats_.find(league) != stats_.end())
-        {
+        if (stats_.find(league) != stats_.end()) {
             add_stat(league, (itr -> second.paid));
         }
-        else
-        {
+        else {
             stats_.insert({league, {league}});
             add_stat(league, (itr -> second.paid));
         }
@@ -149,15 +268,13 @@ void Season::add_stat(std::string key, bool status) {
 
     auto itr = stats_.find(key);
     auto total = stats_.find("Total");
-    if(status == true)
-    {
+    if (status == true) {
         ++(itr -> second.players);
         ++(itr -> second.paid);
         ++(total -> second.players);
         ++(total -> second.paid);
     }
-    else
-    {
+    else {
         ++(itr -> second.players);
         ++(itr -> second.not_paid);
         ++(total -> second.players);
@@ -166,8 +283,7 @@ void Season::add_stat(std::string key, bool status) {
 }
 
 //starts a new season
-void Season::new_season(const int new_year)
-{
+void Season::new_season(const int new_year) {
   current_year_ = new_year;
   players_.clear();
   current_player_ = players_.end();
@@ -310,8 +426,27 @@ bool Season::save() {
   return true;
 }
 
-void Season::search() {
-  //for(auto itr = players_.begin(); itr != players_.end(); ++itr) {
-  //  cout << itr->first << endl;
-  //}
+void Season::search(const string & first, const string & last, const int year, const bool search_paid, const bool paid, const int league) {
+
+    if(search_paid == true) {
+        for(auto itr = players_.begin(); itr != players_.end(); ++itr)
+        {
+            if( (itr -> second.first == first) || (itr -> second.last == last) || (itr -> second.year == year) || (itr -> second.paid == paid) || (get_league_(itr -> second.year) == league)){
+                string name = (itr -> second.first) + " " + (itr -> second.last);
+                search_players_.insert({get_key_(name), {itr -> second.first, itr -> second.last, itr -> second.year, itr -> second.paid}});
+            }
+        }
+    }
+    else if(search_paid == false) {
+        for(auto itr = players_.begin(); itr != players_.end(); ++itr)
+        {
+            if( (itr -> second.first == first) || (itr -> second.last == last) || (itr -> second.year == year) || (get_league_(itr -> second.year) == league)) {
+                string name = (itr -> second.first) + " " + (itr -> second.last);
+                search_players_.insert({get_key_(name), {itr -> second.first, itr -> second.last, itr -> second.year, itr -> second.paid}});
+            }
+        }
+    }
+    for(auto itr = search_players_.begin(); itr != search_players_.end(); ++itr) {
+        cout << itr -> second.first << itr -> second.last << endl;
+    }
 }

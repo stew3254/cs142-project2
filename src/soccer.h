@@ -38,6 +38,7 @@ public:
   Season(const int & y) : current_year_(y), file_("season.txt") {}
 
   void print_players(const std::string & FileName);
+  void print_searched(const std::string & FileName);
 
   void update_stats();
 
@@ -66,7 +67,7 @@ public:
   bool open();
   bool save();
 
-  void search();
+  void search(const std::string & first, const std::string & last, const int year, const bool search_paid, const bool paid, const int league);
   int year() {return current_year_;}
 
 private:
@@ -87,34 +88,8 @@ private:
 
   PlayerMap players_;
   PlayerMap::iterator current_player_;
-  
+
   size_t current_player_pos_;
 };
-
-inline void Season::next_player() {
-  if (players_.size() != 0) {
-    if (current_player_ != --(players_.end())) {
-      ++current_player_;
-      ++current_player_pos_;
-    }
-    else {
-      current_player_ = players_.begin();
-      current_player_pos_ = 1;
-    }
-  }
-}
-
-inline void Season::previous_player() {
-  if (players_.size() != 0) {
-    if (current_player_ != players_.begin()) {
-      --current_player_;
-      --current_player_pos_;
-    }
-    else {
-      current_player_ = --(players_.end());
-      current_player_pos_ = players_.size();
-    }
-  }
-}
 
 #endif // soccer_h_
